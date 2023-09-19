@@ -1,0 +1,91 @@
+[gd_scene load_steps=5 format=3 uid="uid://bbyjd1sb2mnio"]
+
+[sub_resource type="Gradient" id="Gradient_xff5m"]
+interpolation_mode = 2
+colors = PackedColorArray(0.241864, 0.109819, 0.114227, 1, 0.85687, 0.725616, 0.630058, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_hvr74"]
+gradient = SubResource("Gradient_xff5m")
+fill_from = Vector2(0.24359, 0.239316)
+fill_to = Vector2(1, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ilirj"]
+texture = SubResource("GradientTexture2D_hvr74")
+
+[sub_resource type="LabelSettings" id="LabelSettings_0c1ud"]
+font_size = 10
+
+[node name="MetaPanel" type="Control"]
+layout_mode = 3
+anchor_left = 0.307
+anchor_right = 0.725
+anchor_bottom = 1.0
+offset_left = 0.399994
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_ilirj")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+follow_focus = true
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="ItemContainer" type="VBoxContainer" parent="ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/ItemContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ScrollContainer/ItemContainer/HBoxContainer"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_vertical = 1
+text = "Title Bar! Contains info."
+label_settings = SubResource("LabelSettings_0c1ud")
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Panel" type="Panel" parent="ScrollContainer/ItemContainer/HBoxContainer/Label"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="LineEdit" type="LineEdit" parent="ScrollContainer/ItemContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "Title of this thing!"
+flat = true
+
+[node name="Panel" type="Panel" parent="ScrollContainer/ItemContainer/HBoxContainer/LineEdit"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
