@@ -1,16 +1,16 @@
 [gd_scene load_steps=27 format=3 uid="uid://bwo4tfgnyy6e8"]
 
-[ext_resource type="Script" path="res://main.gd" id="1_mjt7e"]
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_fviop"]
 [ext_resource type="Texture2D" uid="uid://d1fge8vg81odj" path="res://icons/minimize.tres" id="2_mj00u"]
 [ext_resource type="Texture2D" uid="uid://dd1o86y88mm14" path="res://testimage3.png" id="2_p8hx6"]
 [ext_resource type="Texture2D" uid="uid://cdhwn32urq03v" path="res://icons/filter_on.tres" id="3_0vqe2"]
 [ext_resource type="AudioStream" uid="uid://dvmc322i86juy" path="res://audio/click_on.ogg" id="3_1alnk"]
-[ext_resource type="Script" path="res://image_view.gd" id="3_w6vxn"]
+[ext_resource type="Script" path="res://scripts/image_view.gd" id="3_at6iu"]
 [ext_resource type="Texture2D" uid="uid://cn7ik7q637g24" path="res://icons/minmax.tres" id="3_yxyc8"]
 [ext_resource type="Texture2D" uid="uid://cnrywnync3bs0" path="res://icons/quit.tres" id="4_2cmkt"]
 [ext_resource type="Texture2D" uid="uid://2l7b3gug3lou" path="res://icons/filter_off.tres" id="4_h7hmt"]
 [ext_resource type="AudioStream" uid="uid://bmli5kstkfpfl" path="res://audio/click_off.ogg" id="4_okrqe"]
-[ext_resource type="Script" path="res://title_bar.gd" id="4_r4g7g"]
+[ext_resource type="Script" path="res://scripts/title_bar.gd" id="4_xa6mu"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tfbcm"]
 
@@ -310,7 +310,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
-script = ExtResource("1_mjt7e")
+script = ExtResource("1_fviop")
 
 [node name="Background" type="TabContainer" parent="."]
 unique_name_in_owner = true
@@ -372,7 +372,7 @@ mouse_filter = 2
 texture = ExtResource("2_p8hx6")
 expand_mode = 1
 stretch_mode = 5
-script = ExtResource("3_w6vxn")
+script = ExtResource("3_at6iu")
 
 [node name="Titlebar" type="Control" parent="."]
 unique_name_in_owner = true
@@ -386,7 +386,7 @@ offset_right = -6.0
 offset_bottom = 46.0
 grow_horizontal = 2
 mouse_filter = 1
-script = ExtResource("4_r4g7g")
+script = ExtResource("4_xa6mu")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Titlebar"]
 layout_mode = 1

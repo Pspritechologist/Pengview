@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Pengview"
-run/main_scene="res://main.tscn"
+run/main_scene="res://scenes/main.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="PspriteGames/Pengview"
 config/features=PackedStringArray("4.2", "GL Compatibility")
@@ -23,7 +23,7 @@ config/icon="res://icon.png"
 
 [autoload]
 
-InitialSetup="*res://initial_setup.gd"
+InitialSetup="*res://scripts/initial_setup.gd"
 
 [display]
 
