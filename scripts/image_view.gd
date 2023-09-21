@@ -49,8 +49,8 @@ func set_filter(filter: bool) -> void:
 
 ## Checks if the given string is a valid image file.
 static func is_valid_image_path(path: String) -> bool:
-	path = path.get_extension().to_lower()
-	return path == "png" or path == "jpg" or path == "jpeg" or path == "webp"
+	var ext = path.get_extension().to_lower()
+	return (ext == "png" or ext == "jpg" or ext == "jpeg" or ext == "webp") and (path.is_relative_path() or path.is_absolute_path())
 
 
 ## Keeps the image's pivot point centered based on .

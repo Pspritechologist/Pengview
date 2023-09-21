@@ -1,16 +1,17 @@
-[gd_scene load_steps=27 format=3 uid="uid://bwo4tfgnyy6e8"]
+[gd_scene load_steps=30 format=3 uid="uid://bwo4tfgnyy6e8"]
 
-[ext_resource type="Script" path="res://scripts/main.gd" id="1_fviop"]
-[ext_resource type="Texture2D" uid="uid://d1fge8vg81odj" path="res://icons/minimize.tres" id="2_mj00u"]
-[ext_resource type="Texture2D" uid="uid://dd1o86y88mm14" path="res://testimage3.png" id="2_p8hx6"]
-[ext_resource type="Texture2D" uid="uid://cdhwn32urq03v" path="res://icons/filter_on.tres" id="3_0vqe2"]
-[ext_resource type="AudioStream" uid="uid://dvmc322i86juy" path="res://audio/click_on.ogg" id="3_1alnk"]
-[ext_resource type="Script" path="res://scripts/image_view.gd" id="3_at6iu"]
-[ext_resource type="Texture2D" uid="uid://cn7ik7q637g24" path="res://icons/minmax.tres" id="3_yxyc8"]
-[ext_resource type="Texture2D" uid="uid://cnrywnync3bs0" path="res://icons/quit.tres" id="4_2cmkt"]
-[ext_resource type="Texture2D" uid="uid://2l7b3gug3lou" path="res://icons/filter_off.tres" id="4_h7hmt"]
-[ext_resource type="AudioStream" uid="uid://bmli5kstkfpfl" path="res://audio/click_off.ogg" id="4_okrqe"]
-[ext_resource type="Script" path="res://scripts/title_bar.gd" id="4_xa6mu"]
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_c6v5v"]
+[ext_resource type="Texture2D" uid="uid://bi7a426gad2ng" path="res://icons/checkerboard.png" id="2_afgk3"]
+[ext_resource type="Script" path="res://scripts/image_view.gd" id="3_msis2"]
+[ext_resource type="Script" path="res://scripts/title_bar.gd" id="4_hugmt"]
+[ext_resource type="Texture2D" uid="uid://cdhwn32urq03v" path="res://icons/filter_on.tres" id="5_ub7h8"]
+[ext_resource type="Texture2D" uid="uid://2l7b3gug3lou" path="res://icons/filter_off.tres" id="6_ojh3h"]
+[ext_resource type="AudioStream" uid="uid://dvmc322i86juy" path="res://audio/click_on.ogg" id="7_jdfsb"]
+[ext_resource type="AudioStream" uid="uid://bmli5kstkfpfl" path="res://audio/click_off.ogg" id="8_5skqw"]
+[ext_resource type="Texture2D" uid="uid://d1fge8vg81odj" path="res://icons/minimize.tres" id="9_kwsgi"]
+[ext_resource type="Texture2D" uid="uid://cn7ik7q637g24" path="res://icons/minmax.tres" id="10_s8p7l"]
+[ext_resource type="Texture2D" uid="uid://cev2idvdy818e" path="res://info.png" id="11_mg2mc"]
+[ext_resource type="Texture2D" uid="uid://cnrywnync3bs0" path="res://icons/quit.tres" id="11_t04j1"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tfbcm"]
 
@@ -31,6 +32,24 @@ colors = PackedColorArray(0.669047, 0.220342, 0.100504, 1, 0.442316, 0.141673, 0
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_3bsx2"]
 gradient = SubResource("Gradient_h5s16")
 fill_to = Vector2(1, 0.477064)
+
+[sub_resource type="GDScript" id="GDScript_wb08w"]
+script/source = "extends ColorRect
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	if OS.has_feature(\"transparent\")
+	
+	$Color.color_changed.connect(
+		func(new): 
+			color = new
+			$Color.modulate = Color(new, 1).lightened(0.2)
+	)
+	$Color.color = Color(randf_range(0, 1), randf_range(0, 1), randf_range(0, 1))
+	color = $Color.color
+	$Color.modulate = Color($Color.color, 1).lightened(0.2)
+"
 
 [sub_resource type="Shader" id="Shader_25a4r"]
 code = "shader_type canvas_item;
@@ -283,6 +302,15 @@ shader_parameter/edge1 = 1.0
 shader_parameter/color1 = Color(0.984314, 0.894118, 0.490196, 1)
 shader_parameter/color2 = Color(0.894118, 0.396078, 0.0588235, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ndjx1"]
+bg_color = Color(0, 0, 0, 0.219608)
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+expand_margin_left = 6.0
+expand_margin_top = 6.0
+expand_margin_right = 6.0
+expand_margin_bottom = 8.0
+
 [sub_resource type="GDScript" id="GDScript_std44"]
 script/source = "extends CheckButton
 
@@ -310,7 +338,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
-script = ExtResource("1_fviop")
+script = ExtResource("1_c6v5v")
 
 [node name="Background" type="TabContainer" parent="."]
 unique_name_in_owner = true
@@ -334,6 +362,40 @@ tabs_visible = false
 layout_mode = 2
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_3bsx2")
+
+[node name="Whiten\'t" type="ColorRect" parent="Background"]
+visible = false
+layout_mode = 2
+color = Color(0.823529, 0.823529, 0.823529, 1)
+
+[node name="Blackn\'t" type="ColorRect" parent="Background"]
+visible = false
+layout_mode = 2
+color = Color(0.0901961, 0.0901961, 0.0901961, 1)
+
+[node name="Checkerboard" type="TextureRect" parent="Background"]
+visible = false
+layout_mode = 2
+texture = ExtResource("2_afgk3")
+stretch_mode = 1
+
+[node name="Coloured" type="ColorRect" parent="Background"]
+visible = false
+layout_mode = 2
+script = SubResource("GDScript_wb08w")
+
+[node name="Color" type="ColorPickerButton" parent="Background/Coloured"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -42.0
+offset_right = 42.0
+grow_vertical = 0
+focus_mode = 0
+icon_alignment = 1
+expand_icon = true
+color = Color(0.74902, 0.34902, 0.0784314, 1)
 
 [node name="NeonScape" type="ColorRect" parent="Background"]
 visible = false
@@ -369,14 +431,12 @@ grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(400, 250)
 mouse_filter = 2
-texture = ExtResource("2_p8hx6")
 expand_mode = 1
 stretch_mode = 5
-script = ExtResource("3_at6iu")
+script = ExtResource("3_msis2")
 
 [node name="Titlebar" type="Control" parent="."]
 unique_name_in_owner = true
-clip_contents = true
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -386,9 +446,27 @@ offset_right = -6.0
 offset_bottom = 46.0
 grow_horizontal = 2
 mouse_filter = 1
-script = ExtResource("4_xa6mu")
+script = ExtResource("4_hugmt")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Titlebar"]
+[node name="Panel" type="Panel" parent="Titlebar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ndjx1")
+
+[node name="Control" type="Control" parent="Titlebar"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Titlebar/Control"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -397,7 +475,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="TitleLabel" type="RichTextLabel" parent="Titlebar/HBoxContainer"]
+[node name="TitleLabel" type="RichTextLabel" parent="Titlebar/Control/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
@@ -408,83 +486,86 @@ scroll_active = false
 autowrap_mode = 0
 shortcut_keys_enabled = false
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Titlebar/HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Titlebar/Control/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 alignment = 2
 
-[node name="BackgroundOptions" type="OptionButton" parent="Titlebar/HBoxContainer/HBoxContainer"]
+[node name="BackgroundOptions" type="OptionButton" parent="Titlebar/Control/HBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 fit_to_longest_item = false
 
-[node name="ScaleOptions" type="OptionButton" parent="Titlebar/HBoxContainer/HBoxContainer"]
+[node name="ScaleOptions" type="OptionButton" parent="Titlebar/Control/HBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 fit_to_longest_item = false
 
-[node name="FilterToggle" type="CheckButton" parent="Titlebar/HBoxContainer/HBoxContainer"]
+[node name="FilterToggle" type="CheckButton" parent="Titlebar/Control/HBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 2
 focus_mode = 0
 button_pressed = true
 action_mode = 0
-icon = ExtResource("3_0vqe2")
+icon = ExtResource("5_ub7h8")
 icon_alignment = 2
 script = SubResource("GDScript_std44")
-texture_on = ExtResource("3_0vqe2")
-texture_off = ExtResource("4_h7hmt")
+texture_on = ExtResource("5_ub7h8")
+texture_off = ExtResource("6_ojh3h")
 
-[node name="ClickOn" type="AudioStreamPlayer" parent="Titlebar/HBoxContainer/HBoxContainer/FilterToggle"]
-stream = ExtResource("3_1alnk")
+[node name="ClickOn" type="AudioStreamPlayer" parent="Titlebar/Control/HBoxContainer/HBoxContainer/FilterToggle"]
+stream = ExtResource("7_jdfsb")
 volume_db = 7.0
 
-[node name="ClickOff" type="AudioStreamPlayer" parent="Titlebar/HBoxContainer/HBoxContainer/FilterToggle"]
-stream = ExtResource("4_okrqe")
+[node name="ClickOff" type="AudioStreamPlayer" parent="Titlebar/Control/HBoxContainer/HBoxContainer/FilterToggle"]
+stream = ExtResource("8_5skqw")
 volume_db = 7.0
 
-[node name="VSeparator" type="VSeparator" parent="Titlebar/HBoxContainer/HBoxContainer"]
+[node name="VSeparator" type="VSeparator" parent="Titlebar/Control/HBoxContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 10
 theme_override_styles/separator = SubResource("StyleBoxEmpty_q6wh3")
 
-[node name="HideButton" type="Button" parent="Titlebar/HBoxContainer/HBoxContainer"]
+[node name="HideButton" type="Button" parent="Titlebar/Control/HBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 focus_mode = 0
 mouse_filter = 1
 theme_override_styles/normal = SubResource("StyleBoxEmpty_ieygm")
-icon = ExtResource("2_mj00u")
+icon = ExtResource("9_kwsgi")
 icon_alignment = 1
 expand_icon = true
 
-[node name="MinMaxButton" type="Button" parent="Titlebar/HBoxContainer/HBoxContainer"]
+[node name="MinMaxButton" type="Button" parent="Titlebar/Control/HBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 focus_mode = 0
 mouse_filter = 1
 theme_override_styles/normal = SubResource("StyleBoxEmpty_ieygm")
-icon = ExtResource("3_yxyc8")
+icon = ExtResource("10_s8p7l")
 expand_icon = true
 
-[node name="QuitButton" type="Button" parent="Titlebar/HBoxContainer/HBoxContainer"]
+[node name="QuitButton" type="Button" parent="Titlebar/Control/HBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 focus_mode = 0
 mouse_filter = 1
 theme_override_styles/normal = SubResource("StyleBoxEmpty_ieygm")
-icon = ExtResource("4_2cmkt")
+icon = ExtResource("11_t04j1")
 expand_icon = true
 
 [node name="Borders" type="Control" parent="."]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -583,13 +664,17 @@ mouse_default_cursor_shape = 12
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.111
-anchor_top = 0.62
-anchor_right = 0.161
-anchor_bottom = 0.696
+anchor_left = 0.00725001
+anchor_top = 0.046
+anchor_right = 0.05475
+anchor_bottom = 0.122
 offset_left = 0.199989
 offset_right = 0.199982
 offset_bottom = -3.05176e-05
+icon = ExtResource("11_mg2mc")
+flat = true
+expand_icon = true
+metadata/_edit_use_anchors_ = true
 
 [connection signal="item_rect_changed" from="PrimaryWindow/ImageView" to="PrimaryWindow/ImageView" method="_on_item_rect_changed"]
-[connection signal="toggled" from="Titlebar/HBoxContainer/HBoxContainer/FilterToggle" to="Titlebar/HBoxContainer/HBoxContainer/FilterToggle" method="_on_toggled"]
+[connection signal="toggled" from="Titlebar/Control/HBoxContainer/HBoxContainer/FilterToggle" to="Titlebar/Control/HBoxContainer/HBoxContainer/FilterToggle" method="_on_toggled"]

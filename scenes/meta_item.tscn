@@ -1,0 +1,55 @@
+[gd_scene load_steps=3 format=3 uid="uid://dsg24jq8136r7"]
+
+[ext_resource type="Script" path="res://scripts/meta_item.gd" id="1_0q2tp"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_0c1ud"]
+font_size = 10
+
+[node name="MetaItem" type="HBoxContainer"]
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -12.5
+offset_bottom = 12.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_0q2tp")
+
+[node name="Label" type="Label" parent="."]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+size_flags_stretch_ratio = 0.4
+text = "Title Bar! Contains info."
+label_settings = SubResource("LabelSettings_0c1ud")
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Panel" type="Panel" parent="Label"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="LineEdit" type="LineEdit" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "Title of this thing!"
+flat = true
+
+[node name="Panel" type="Panel" parent="LineEdit"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
