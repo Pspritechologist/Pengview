@@ -1,8 +1,7 @@
-[gd_scene load_steps=30 format=3 uid="uid://bwo4tfgnyy6e8"]
+[gd_scene load_steps=28 format=3 uid="uid://bwo4tfgnyy6e8"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_c6v5v"]
 [ext_resource type="Texture2D" uid="uid://bi7a426gad2ng" path="res://icons/checkerboard.png" id="2_afgk3"]
-[ext_resource type="Script" path="res://scripts/image_view.gd" id="3_msis2"]
 [ext_resource type="Script" path="res://scripts/title_bar.gd" id="4_hugmt"]
 [ext_resource type="Texture2D" uid="uid://cdhwn32urq03v" path="res://icons/filter_on.tres" id="5_ub7h8"]
 [ext_resource type="Texture2D" uid="uid://2l7b3gug3lou" path="res://icons/filter_off.tres" id="6_ojh3h"]
@@ -10,7 +9,6 @@
 [ext_resource type="AudioStream" uid="uid://bmli5kstkfpfl" path="res://audio/click_off.ogg" id="8_5skqw"]
 [ext_resource type="Texture2D" uid="uid://d1fge8vg81odj" path="res://icons/minimize.tres" id="9_kwsgi"]
 [ext_resource type="Texture2D" uid="uid://cn7ik7q637g24" path="res://icons/minmax.tres" id="10_s8p7l"]
-[ext_resource type="Texture2D" uid="uid://cev2idvdy818e" path="res://info.png" id="11_mg2mc"]
 [ext_resource type="Texture2D" uid="uid://cnrywnync3bs0" path="res://icons/quit.tres" id="11_t04j1"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tfbcm"]
@@ -39,8 +37,6 @@ script/source = "extends ColorRect
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	if OS.has_feature(\"transparent\")
-	
 	$Color.color_changed.connect(
 		func(new): 
 			color = new
@@ -366,22 +362,26 @@ texture = SubResource("GradientTexture2D_3bsx2")
 [node name="Whiten\'t" type="ColorRect" parent="Background"]
 visible = false
 layout_mode = 2
+mouse_filter = 2
 color = Color(0.823529, 0.823529, 0.823529, 1)
 
 [node name="Blackn\'t" type="ColorRect" parent="Background"]
 visible = false
 layout_mode = 2
+mouse_filter = 2
 color = Color(0.0901961, 0.0901961, 0.0901961, 1)
 
 [node name="Checkerboard" type="TextureRect" parent="Background"]
 visible = false
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("2_afgk3")
 stretch_mode = 1
 
 [node name="Coloured" type="ColorRect" parent="Background"]
 visible = false
 layout_mode = 2
+mouse_filter = 2
 script = SubResource("GDScript_wb08w")
 
 [node name="Color" type="ColorPickerButton" parent="Background/Coloured"]
@@ -411,29 +411,15 @@ layout_mode = 2
 mouse_filter = 2
 color = Color(0.721569, 0.415686, 0.211765, 1)
 
-[node name="PrimaryWindow" type="Control" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="ImageView" type="TextureRect" parent="PrimaryWindow"]
+[node name="ImageViewCont" type="Control" parent="."]
 unique_name_in_owner = true
-texture_filter = 2
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-pivot_offset = Vector2(400, 250)
 mouse_filter = 2
-expand_mode = 1
-stretch_mode = 5
-script = ExtResource("3_msis2")
 
 [node name="Titlebar" type="Control" parent="."]
 unique_name_in_owner = true
@@ -532,7 +518,6 @@ theme_override_styles/separator = SubResource("StyleBoxEmpty_q6wh3")
 
 [node name="HideButton" type="Button" parent="Titlebar/Control/HBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
-visible = false
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 focus_mode = 0
@@ -554,7 +539,6 @@ expand_icon = true
 
 [node name="QuitButton" type="Button" parent="Titlebar/Control/HBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
-visible = false
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 focus_mode = 0
@@ -565,7 +549,6 @@ expand_icon = true
 
 [node name="Borders" type="Control" parent="."]
 unique_name_in_owner = true
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -578,21 +561,23 @@ mouse_filter = 2
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_top = 8.0
-offset_right = 6.0
-offset_bottom = -8.0
+offset_top = 14.0
+offset_right = 12.0
+offset_bottom = -14.0
 grow_vertical = 2
 mouse_default_cursor_shape = 10
+metadata/_edit_group_ = true
 
 [node name="BT" type="Control" parent="Borders"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_left = 8.0
-offset_right = -8.0
-offset_bottom = 6.0
+offset_left = 14.0
+offset_right = -14.0
+offset_bottom = 12.0
 grow_horizontal = 2
 mouse_default_cursor_shape = 9
+metadata/_edit_group_ = true
 
 [node name="BR" type="Control" parent="Borders"]
 layout_mode = 1
@@ -600,12 +585,13 @@ anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -6.0
-offset_top = 8.0
-offset_bottom = -8.0
+offset_left = -12.0
+offset_top = 14.0
+offset_bottom = -14.0
 grow_horizontal = 0
 grow_vertical = 2
 mouse_default_cursor_shape = 10
+metadata/_edit_group_ = true
 
 [node name="BB" type="Control" parent="Borders"]
 layout_mode = 1
@@ -613,22 +599,24 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 8.0
-offset_top = -6.0
-offset_right = -8.0
+offset_left = 14.0
+offset_top = -12.0
+offset_right = -14.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_default_cursor_shape = 9
+metadata/_edit_group_ = true
 
 [node name="CBL" type="Control" parent="Borders"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -8.0
-offset_right = 8.0
+offset_top = -14.0
+offset_right = 14.0
 grow_vertical = 0
 mouse_default_cursor_shape = 11
+metadata/_edit_group_ = true
 
 [node name="CBR" type="Control" parent="Borders"]
 layout_mode = 1
@@ -637,44 +625,30 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -8.0
-offset_top = -8.0
+offset_left = -14.0
+offset_top = -14.0
 grow_horizontal = 0
 grow_vertical = 0
 mouse_default_cursor_shape = 12
+metadata/_edit_group_ = true
 
 [node name="CTR" type="Control" parent="Borders"]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -8.0
-offset_bottom = 8.0
+offset_left = -14.0
+offset_bottom = 14.0
 grow_horizontal = 0
 mouse_default_cursor_shape = 11
+metadata/_edit_group_ = true
 
 [node name="CTL" type="Control" parent="Borders"]
 layout_mode = 1
 anchors_preset = 0
-offset_right = 8.0
-offset_bottom = 8.0
+offset_right = 14.0
+offset_bottom = 14.0
 mouse_default_cursor_shape = 12
+metadata/_edit_group_ = true
 
-[node name="MetaButton" type="Button" parent="."]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.00725001
-anchor_top = 0.046
-anchor_right = 0.05475
-anchor_bottom = 0.122
-offset_left = 0.199989
-offset_right = 0.199982
-offset_bottom = -3.05176e-05
-icon = ExtResource("11_mg2mc")
-flat = true
-expand_icon = true
-metadata/_edit_use_anchors_ = true
-
-[connection signal="item_rect_changed" from="PrimaryWindow/ImageView" to="PrimaryWindow/ImageView" method="_on_item_rect_changed"]
 [connection signal="toggled" from="Titlebar/Control/HBoxContainer/HBoxContainer/FilterToggle" to="Titlebar/Control/HBoxContainer/HBoxContainer/FilterToggle" method="_on_toggled"]

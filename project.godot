@@ -15,7 +15,6 @@ run/main_scene="res://scenes/main.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="PspriteGames/Pengview"
 config/features=PackedStringArray("4.2", "GL Compatibility")
-run/max_fps=20
 run/low_processor_mode=true
 boot_splash/show_image=false
 boot_splash/fullsize=false
@@ -31,6 +30,7 @@ InitialSetup="*res://scripts/initial_setup.gd"
 window/size/viewport_width=800
 window/size/viewport_height=500
 window/size/initial_position_type=4
+window/size/borderless=true
 window/size/transparent=true
 window/energy_saving/keep_screen_on=false
 window/subwindows/embed_subwindows=false
@@ -38,10 +38,6 @@ window/stretch/aspect="expand"
 window/per_pixel_transparency/allowed=true
 window/handheld/orientation=6
 window/ios/allow_high_refresh_rate=false
-
-[editor]
-
-run/main_run_args="\"D:\\Pictures\\Psyduck Squart.png\""
 
 [rendering]
 

@@ -2,10 +2,17 @@ class_name ImageView extends TextureRect
 
 ## Enum for scaling options.
 enum scale_mode{
+	FIT_CANVAS,
 	STRETCH_CANVAS,
-	KEEP_ORIGINAL,
-	FIT_CANVAS
+	KEEP_ORIGINAL
 }
+
+
+func _init() -> void:
+	expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	set_anchors_preset(Control.PRESET_FULL_RECT)
 
 
 ## Loads an image from a file path, optionally setting the directory to be used.
