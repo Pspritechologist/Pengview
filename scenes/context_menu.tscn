@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scripts/context_menu.gd" id="1_npxxm"]
 
 [node name="PopupMenu" type="PopupMenu"]
+title = "Awa"
 position = Vector2i(353, 180)
 size = Vector2i(186, 143)
 visible = true

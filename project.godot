@@ -11,15 +11,18 @@ config_version=5
 [application]
 
 config/name="Pengview"
+config/version="dev5"
 run/main_scene="res://scenes/main.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="PspriteGames/Pengview"
+config/project_settings_override="user://settings.cfg"
 config/features=PackedStringArray("4.2", "GL Compatibility")
 run/low_processor_mode=true
 boot_splash/show_image=false
 boot_splash/fullsize=false
 boot_splash/use_filter=false
 config/icon="res://icon.png"
+config/windows_native_icon="res://icon.ico"
 
 [autoload]
 
@@ -38,6 +41,10 @@ window/stretch/aspect="expand"
 window/per_pixel_transparency/allowed=true
 window/handheld/orientation=6
 window/ios/allow_high_refresh_rate=false
+
+[psprite_games]
+
+pengview/check_for_exiftool=true
 
 [rendering]
 

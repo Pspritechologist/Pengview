@@ -1,8 +1,7 @@
-[gd_scene load_steps=28 format=3 uid="uid://bwo4tfgnyy6e8"]
+[gd_scene load_steps=27 format=3 uid="uid://bwo4tfgnyy6e8"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_c6v5v"]
 [ext_resource type="Texture2D" uid="uid://bi7a426gad2ng" path="res://icons/checkerboard.png" id="2_afgk3"]
-[ext_resource type="Script" path="res://scripts/title_bar.gd" id="4_hugmt"]
 [ext_resource type="Texture2D" uid="uid://cdhwn32urq03v" path="res://icons/filter_on.tres" id="5_ub7h8"]
 [ext_resource type="Texture2D" uid="uid://2l7b3gug3lou" path="res://icons/filter_off.tres" id="6_ojh3h"]
 [ext_resource type="AudioStream" uid="uid://dvmc322i86juy" path="res://audio/click_on.ogg" id="7_jdfsb"]
@@ -34,17 +33,23 @@ fill_to = Vector2(1, 0.477064)
 [sub_resource type="GDScript" id="GDScript_wb08w"]
 script/source = "extends ColorRect
 
+@export var button: ColorPickerButton
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	$Color.color_changed.connect(
+	button.color_changed.connect(
 		func(new): 
 			color = new
-			$Color.modulate = Color(new, 1).lightened(0.2)
+			button.modulate = Color(new, 1).lightened(0.2)
 	)
-	$Color.color = Color(randf_range(0, 1), randf_range(0, 1), randf_range(0, 1))
-	color = $Color.color
-	$Color.modulate = Color($Color.color, 1).lightened(0.2)
+	button.color = Color(randf_range(0, 1), randf_range(0, 1), randf_range(0, 1))
+	color = button.color
+	button.modulate = Color(button.color, 1).lightened(0.2)
+
+
+func _on_visibility_changed() -> void:
+	button.visible = visible
 "
 
 [sub_resource type="Shader" id="Shader_25a4r"]
@@ -378,24 +383,12 @@ mouse_filter = 2
 texture = ExtResource("2_afgk3")
 stretch_mode = 1
 
-[node name="Coloured" type="ColorRect" parent="Background"]
+[node name="Coloured" type="ColorRect" parent="Background" node_paths=PackedStringArray("button")]
 visible = false
 layout_mode = 2
 mouse_filter = 2
 script = SubResource("GDScript_wb08w")
-
-[node name="Color" type="ColorPickerButton" parent="Background/Coloured"]
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -42.0
-offset_right = 42.0
-grow_vertical = 0
-focus_mode = 0
-icon_alignment = 1
-expand_icon = true
-color = Color(0.74902, 0.34902, 0.0784314, 1)
+button = NodePath("../../Titlebar/Control/HBoxContainer/HBoxContainer/Color")
 
 [node name="NeonScape" type="ColorRect" parent="Background"]
 visible = false
@@ -413,6 +406,7 @@ color = Color(0.721569, 0.415686, 0.211765, 1)
 
 [node name="ImageViewCont" type="Control" parent="."]
 unique_name_in_owner = true
+clip_contents = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -432,7 +426,6 @@ offset_right = -6.0
 offset_bottom = 46.0
 grow_horizontal = 2
 mouse_filter = 1
-script = ExtResource("4_hugmt")
 
 [node name="Panel" type="Panel" parent="Titlebar"]
 layout_mode = 1
@@ -441,6 +434,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ndjx1")
 
 [node name="Control" type="Control" parent="Titlebar"]
@@ -451,6 +445,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Titlebar/Control"]
 layout_mode = 1
@@ -461,13 +456,20 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="TitleLabel" type="RichTextLabel" parent="Titlebar/Control/HBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Titlebar/Control/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 0
+
+[node name="TitleLabel" type="RichTextLabel" parent="Titlebar/Control/HBoxContainer/ScrollContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 mouse_filter = 2
 bbcode_enabled = true
-text = "[color=white][outline_color=black][outline_size=4][font_size=24]"
-fit_content = true
+text = "[color=white][outline_color=black][outline_size=4][font_size=24]Pengview"
 scroll_active = false
 autowrap_mode = 0
 shortcut_keys_enabled = false
@@ -477,6 +479,15 @@ layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 alignment = 2
+
+[node name="Color" type="ColorPickerButton" parent="Titlebar/Control/HBoxContainer/HBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+focus_mode = 0
+icon_alignment = 1
+expand_icon = true
+color = Color(0.74902, 0.34902, 0.0784314, 1)
 
 [node name="BackgroundOptions" type="OptionButton" parent="Titlebar/Control/HBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
@@ -651,4 +662,5 @@ offset_bottom = 14.0
 mouse_default_cursor_shape = 12
 metadata/_edit_group_ = true
 
+[connection signal="visibility_changed" from="Background/Coloured" to="Background/Coloured" method="_on_visibility_changed"]
 [connection signal="toggled" from="Titlebar/Control/HBoxContainer/HBoxContainer/FilterToggle" to="Titlebar/Control/HBoxContainer/HBoxContainer/FilterToggle" method="_on_toggled"]

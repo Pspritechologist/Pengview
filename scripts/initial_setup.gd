@@ -1,6 +1,7 @@
 extends Node
 
 var exiftool_installed: bool = true
+const exift_tool_enable_path: String = "psprite_games/pengview/check_for_exiftool"
 
 # Windows vars
 const _int_exiftool_path: String = "res://exiftool.exe"
@@ -14,6 +15,10 @@ const _user_install_sh: String = "user://exif_install.sh"
 
 
 func _ready() -> void:
+	if !ProjectSettings.get_setting_with_override(exift_tool_enable_path):
+		print("Skipping check for exiftools...")
+		exiftool_installed = false
+		return
 	if OS.get_name() == "Windows":
 		# Windows set up
 		if OS.execute(ProjectSettings.globalize_path(_user_exiftool_path), [], [], true) != OK: # Check for exiftool.exe.
