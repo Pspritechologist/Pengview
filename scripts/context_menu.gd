@@ -28,7 +28,7 @@ func _init(main_window: Main) -> void:
 	set_item_metadata(item_count - 1, _on_scaling_pressed.bind(item_count - 1))
 	
 	add_item("Quit")
-	set_item_metadata(item_count - 1, func(): get_tree().quit())
+	set_item_metadata(item_count - 1, func(): main.quit())
 
 	index_pressed.connect(func(index): get_item_metadata(index).call())
 

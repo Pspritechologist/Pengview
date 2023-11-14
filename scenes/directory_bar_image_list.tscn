@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://cenly7huwqt8p"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5xb10"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4n2m4"]
+
+[node name="ImageList" type="ItemList"]
+offset_right = 235.0
+offset_bottom = 216.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_force_pass_scroll_events = false
+theme_override_font_sizes/font_size = 15
+theme_override_styles/panel = SubResource("StyleBoxEmpty_5xb10")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_4n2m4")
+allow_reselect = true
+icon_mode = 0
+fixed_icon_size = Vector2i(40, 40)

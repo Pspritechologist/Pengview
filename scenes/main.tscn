@@ -1,7 +1,9 @@
-[gd_scene load_steps=27 format=3 uid="uid://bwo4tfgnyy6e8"]
+[gd_scene load_steps=33 format=3 uid="uid://bwo4tfgnyy6e8"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_c6v5v"]
 [ext_resource type="Texture2D" uid="uid://bi7a426gad2ng" path="res://icons/checkerboard.png" id="2_afgk3"]
+[ext_resource type="Script" path="res://scripts/fading_control.gd" id="3_57g8c"]
+[ext_resource type="Script" path="res://scripts/directory_bar.gd" id="3_nlmgb"]
 [ext_resource type="Texture2D" uid="uid://cdhwn32urq03v" path="res://icons/filter_on.tres" id="5_ub7h8"]
 [ext_resource type="Texture2D" uid="uid://2l7b3gug3lou" path="res://icons/filter_off.tres" id="6_ojh3h"]
 [ext_resource type="AudioStream" uid="uid://dvmc322i86juy" path="res://audio/click_on.ogg" id="7_jdfsb"]
@@ -303,6 +305,32 @@ shader_parameter/edge1 = 1.0
 shader_parameter/color1 = Color(0.984314, 0.894118, 0.490196, 1)
 shader_parameter/color2 = Color(0.894118, 0.396078, 0.0588235, 1)
 
+[sub_resource type="LabelSettings" id="LabelSettings_j4vyn"]
+font_size = 14
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="GDScript" id="GDScript_oy0xd"]
+script/source = "extends Label
+
+const version_setting_path := \"application/config/version\"
+
+
+func _ready() -> void:
+	text = ProjectSettings.get_setting(version_setting_path)
+"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bkr0g"]
+bg_color = Color(0, 0, 0, 0.219608)
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+expand_margin_top = 6.0
+expand_margin_right = 6.0
+expand_margin_bottom = 8.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_0t6dg"]
+font_size = 14
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ndjx1"]
 bg_color = Color(0, 0, 0, 0.219608)
 corner_radius_bottom_right = 12
@@ -340,6 +368,8 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_c6v5v")
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
 
 [node name="Background" type="TabContainer" parent="."]
 unique_name_in_owner = true
@@ -358,6 +388,9 @@ theme_override_styles/panel = SubResource("StyleBoxEmpty_hnqm2")
 theme_override_styles/tabbar_background = SubResource("StyleBoxEmpty_k4c1u")
 clip_tabs = false
 tabs_visible = false
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+metadata/_edit_group_ = true
 
 [node name="Classic" type="TextureRect" parent="Background"]
 layout_mode = 2
@@ -404,6 +437,31 @@ layout_mode = 2
 mouse_filter = 2
 color = Color(0.721569, 0.415686, 0.211765, 1)
 
+[node name="Version" type="Control" parent="."]
+modulate = Color(1, 1, 1, 0.560784)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -27.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="VersionLabel" type="Label" parent="Version"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Version"
+label_settings = SubResource("LabelSettings_j4vyn")
+vertical_alignment = 2
+text_overrun_behavior = 1
+script = SubResource("GDScript_oy0xd")
+
 [node name="ImageViewCont" type="Control" parent="."]
 unique_name_in_owner = true
 clip_contents = true
@@ -414,6 +472,58 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+metadata/_edit_lock_ = true
+metadata/_edit_group_ = true
+
+[node name="DirectoryBar" type="Control" parent="." node_paths=PackedStringArray("directory_label", "image_list_cont", "date_sort_button")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_top = 94.0
+offset_right = 132.0
+offset_bottom = -91.0
+grow_vertical = 2
+script = ExtResource("3_nlmgb")
+directory_label = NodePath("ItemListContainer/HBoxContainer/DirectoryLabel")
+image_list_cont = NodePath("ItemListContainer")
+date_sort_button = NodePath("ItemListContainer/HBoxContainer/DateSortButton")
+
+[node name="Panel" type="Panel" parent="DirectoryBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bkr0g")
+
+[node name="ItemListContainer" type="VBoxContainer" parent="DirectoryBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 9.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="DirectoryBar/ItemListContainer"]
+layout_mode = 2
+
+[node name="DirectoryLabel" type="Label" parent="DirectoryBar/ItemListContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+label_settings = SubResource("LabelSettings_0t6dg")
+horizontal_alignment = 1
+text_overrun_behavior = 3
+
+[node name="DateSortButton" type="Button" parent="DirectoryBar/ItemListContainer/HBoxContainer"]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+toggle_mode = true
 
 [node name="Titlebar" type="Control" parent="."]
 unique_name_in_owner = true
@@ -425,7 +535,11 @@ offset_top = 6.0
 offset_right = -6.0
 offset_bottom = 46.0
 grow_horizontal = 2
-mouse_filter = 1
+mouse_force_pass_scroll_events = false
+script = ExtResource("3_57g8c")
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+metadata/_edit_group_ = true
 
 [node name="Panel" type="Panel" parent="Titlebar"]
 layout_mode = 1
@@ -494,12 +608,14 @@ unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 fit_to_longest_item = false
+allow_reselect = true
 
 [node name="ScaleOptions" type="OptionButton" parent="Titlebar/Control/HBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 fit_to_longest_item = false
+allow_reselect = true
 
 [node name="FilterToggle" type="CheckButton" parent="Titlebar/Control/HBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
@@ -567,6 +683,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+metadata/_edit_lock_ = true
+metadata/_edit_group_ = true
 
 [node name="BL" type="Control" parent="Borders"]
 layout_mode = 1
