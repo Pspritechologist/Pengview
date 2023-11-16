@@ -55,8 +55,8 @@ func add_image_paths_to_browser(paths: PackedStringArray) -> void:
 	for path in paths:
 		var image: Image = Image.load_from_file(path)
 		if !image:
-			printerr("Directory Browser could not load image: %s" % path)
-			continue
+			print_debug("Directory Browser could not load image: %s" % path) #TODO DRY this code up.
+			image = preload("res://icons/icon.tres").get_image() #TODO Support getting an image of some kind for gifs.
 		var img_size := image.get_size()
 		@warning_ignore("integer_division")
 		img_size.x = img_size.x * 48 / img_size.y
@@ -86,8 +86,8 @@ func _setup_directory_threaded(base_path: String, thread: Thread) -> void:
 		var path: = "%s\\%s" % [directory, file]
 		var image: Image = Image.load_from_file(path)
 		if !image:
-			printerr("Directory Browser could not load image: %s" % file)
-			continue
+			print_debug("Directory Browser could not load image: %s" % file) #TODO DRY this code up.
+			image = preload("res://icons/icon.tres").get_image() #TODO Support getting an image of some kind for gifs.
 		var img_size := image.get_size()
 		@warning_ignore("integer_division")
 		img_size.x = img_size.x * 48 / img_size.y

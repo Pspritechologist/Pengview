@@ -1,40 +1,76 @@
 extends Node
 
+## Is exiftools installed?
 var exiftool_installed: bool = true
-const exift_tool_enable_path: String = "psprite_games/pengview/check_for_exiftool"
+## Is ffmpeg installed?
+var ffmpeg_installed: bool = true
+
+
+## The command to execute exiftool.
+static var exiftool: String:
+	get:
+		if OS.get_name() == "Windows": return "\"%s\"" % ProjectSettings.globalize_path(_user_exiftool_path)
+		else: return "exiftool"
+
+## The command to execute ffmpeg.
+static var ffmpeg: String:
+	get:
+		if OS.get_name() == "Windows": return "\"%s\"" % ProjectSettings.globalize_path(_user_ffmpeg_path)
+		else: return "ffmpeg"
+
+
+const _depends_enable_path: String = "psprite_games/pengview/check_for_depends"
 
 # Windows vars
-const _int_exiftool_path: String = "res://exiftool.exe"
+const _int_exiftool_path: String = "res://depends/windows/exiftool.exe"
 const _user_exiftool_path: String = "user://exiftool.exe"
 
+const _int_ffmpeg_path: String = "res://depends/windows/ffmpeg.exe"
+const _user_ffmpeg_path: String = "user://ffmpeg.exe"
+
 # Linux vars
-const _unix_install_command: String = "gzip -dc Image-ExifTool-12.65.tar.gz | tar -xf - && cd Image-ExifTool-12.65 && perl Makefile.PL && sudo make install"
-const _int_exiftool_tar: String = "res://Image-ExifTool-12.65.tar.gz"
-const _user_exiftool_tar: String = "user://Image-ExifTool-12.65.tar.gz"
-const _user_install_sh: String = "user://exif_install.sh"
+#const _unix_install_command: String = "gzip -dc Image-ExifTool-12.65.tar.gz | tar -xf - && cd Image-ExifTool-12.65 && perl Makefile.PL && sudo make install"
+#const _int_exiftool_tar: String = "res://Image-ExifTool-12.65.tar.gz"
+#const _user_exiftool_tar: String = "user://Image-ExifTool-12.65.tar.gz"
+#const _user_install_sh: String = "user://exif_install.sh"
 
 
 func _ready() -> void:
-	if !ProjectSettings.get_setting_with_override(exift_tool_enable_path):
-		print("Skipping check for exiftools...")
+	if !ProjectSettings.get_setting_with_override(_depends_enable_path):
+		print("Skipping check for dependencies...")
 		exiftool_installed = false
+		ffmpeg_installed = false
 		return
-	if OS.get_name() == "Windows":
-		# Windows set up
-		if OS.execute(ProjectSettings.globalize_path(_user_exiftool_path), [], [], true) != OK: # Check for exiftool.exe.
+
+	# Check for exiftool.
+	if OS.execute(exiftool, [], [], true) != OK:
+
+		if OS.get_name() == "Windows": # Windows set up.
 			print("Making exiftool.exe")
 			var exif_bytes := FileAccess.get_file_as_bytes(_int_exiftool_path)
 			var user_exe := FileAccess.open(_user_exiftool_path, FileAccess.WRITE)
 			user_exe.store_buffer(exif_bytes)
-			
-	elif OS.get_name() == "Linux":
-		# Linux set up
-		if OS.execute("exiftool", [], [], true) != OK:
+		
+		else: # Linux set up.
 			printerr("exiftool not installed!")
-			print("The .tar.gz for exiftools is located at %s. Install it by running the following command in that folder." % ProjectSettings.globalize_path(_user_exiftool_tar))
-			print(_unix_install_command)
-			print("Restart after installing.")
 			exiftool_installed = false
+	
+	# Check for ffmpeg.
+	if OS.execute(ffmpeg, [], [], true) != OK:
+
+		if OS.get_name() == "Windows": # Windows set up.
+			print("Making ffmpeg.exe")
+			var ffmpeg_bytes := FileAccess.get_file_as_bytes(_int_ffmpeg_path)
+			var user_exe := FileAccess.open(_user_ffmpeg_path, FileAccess.WRITE)
+			user_exe.store_buffer(ffmpeg_bytes)
+		
+		else: # Linux set up.
+			printerr("ffmpeg not installed!")
+			ffmpeg_installed = false
+
+			#print("The .tar.gz for exiftools is located at %s. Install it by running the following command in that folder." % ProjectSettings.globalize_path(_user_exiftool_tar))
+			#print(_unix_install_command)
+			#print("Restart after installing.")
 			#print("Attempting automatic install...")
 #
 			#var exif_bytes := FileAccess.get_file_as_bytes(_int_exiftool_tar)
