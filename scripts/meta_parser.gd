@@ -10,5 +10,5 @@ static func read_meta(filepath: String) -> Dictionary:
 	return dict
 
 
-static func write_meta(filepath: String, meta: Dictionary):
-	pass
+#static func write_meta(filepath: String, meta: Dictionary):
+	#pass

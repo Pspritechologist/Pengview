@@ -44,6 +44,9 @@ func _ready() -> void:
 		child.gui_input.connect(_border_input.bind(child.name)) # Take a moment to appreciate how clean this solution is :).
 	titlebar.gui_input.connect(_main_input.bind(true)) # Connect inputs from the titlerbar to mimic the main UI, indicated as the titlebar.
 	self.gui_input.connect(_main_input.bind(false)) # Connect inputs from the main UI, indicated as the main UI.
+	get_window().files_dropped.connect(func(data: PackedStringArray): 
+		imageview.load_image(data[0], false)
+		directorybar.add_image_paths_to_browser(data)) # Connects files dragged onto the window.
 
 	# Set background options.
 	for i in background.get_tab_count():
@@ -215,9 +218,9 @@ func _setup_meta_post_thread(meta, thread: Thread) -> void:
 
 
 func quit() -> void:
-	if !OS.has_feature("editor"):
-		print("Saving settings to %s" % ProjectSettings.get_setting("application/config/project_settings_override"))
-		ProjectSettings.save_custom(ProjectSettings.get_setting("application/config/project_settings_override"))
+	#if !OS.has_feature("editor"): # Need to work out the right way to do this.
+		#print("Saving settings to %s" % ProjectSettings.get_setting("application/config/project_settings_override"))
+		#ProjectSettings.save_custom(ProjectSettings.get_setting("application/config/project_settings_override"))
 	get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
 	get_tree().quit()
 

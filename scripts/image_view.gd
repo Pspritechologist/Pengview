@@ -46,7 +46,7 @@ static func is_valid_image_path(path: String) -> bool:
 	return (ext == "png" or ext == "jpg" or ext == "jpeg" or ext == "webp") and (path.is_relative_path() or path.is_absolute_path())
 
 
-## Loads an image from a file path, optionally setting the directory to be used.
+## Loads an image from a file path, optionally resizing it.
 func load_image(path: String, resize: bool = true) -> void:
 	# Ensure that the file is a PNG, JPG, or WEBP
 	if !ImageView.is_valid_image_path(path):

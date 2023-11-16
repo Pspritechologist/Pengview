@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://bwo4tfgnyy6e8"]
+[gd_scene load_steps=34 format=3 uid="uid://bwo4tfgnyy6e8"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_c6v5v"]
 [ext_resource type="Texture2D" uid="uid://bi7a426gad2ng" path="res://icons/checkerboard.png" id="2_afgk3"]
@@ -331,6 +331,18 @@ expand_margin_bottom = 8.0
 [sub_resource type="LabelSettings" id="LabelSettings_0t6dg"]
 font_size = 14
 
+[sub_resource type="GDScript" id="GDScript_024cx"]
+script/source = "extends Button
+
+
+func _ready() -> void:
+	toggled.connect(_on_toggle)
+
+	
+func _on_toggle(state: bool) -> void:
+	text = \"D\" if state else \"A\"
+"
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ndjx1"]
 bg_color = Color(0, 0, 0, 0.219608)
 corner_radius_bottom_right = 12
@@ -475,20 +487,22 @@ mouse_filter = 2
 metadata/_edit_lock_ = true
 metadata/_edit_group_ = true
 
-[node name="DirectoryBar" type="Control" parent="." node_paths=PackedStringArray("directory_label", "image_list_cont", "date_sort_button")]
+[node name="DirectoryBar" type="Control" parent="." node_paths=PackedStringArray("directory_label", "image_list_cont", "refresh_button", "date_sort_button", "search_bar")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
 offset_top = 94.0
-offset_right = 132.0
+offset_right = 155.0
 offset_bottom = -91.0
 grow_vertical = 2
 script = ExtResource("3_nlmgb")
-directory_label = NodePath("ItemListContainer/HBoxContainer/DirectoryLabel")
-image_list_cont = NodePath("ItemListContainer")
-date_sort_button = NodePath("ItemListContainer/HBoxContainer/DateSortButton")
+directory_label = NodePath("ImageListContainer/HBoxContainer2/DirectoryLabel")
+image_list_cont = NodePath("ImageListContainer")
+refresh_button = NodePath("ImageListContainer/HBoxContainer2/RefreshButton")
+date_sort_button = NodePath("ImageListContainer/HBoxContainer/DateSortButton")
+search_bar = NodePath("ImageListContainer/HBoxContainer/LineEdit")
 
 [node name="Panel" type="Panel" parent="DirectoryBar"]
 layout_mode = 1
@@ -500,7 +514,7 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_bkr0g")
 
-[node name="ItemListContainer" type="VBoxContainer" parent="DirectoryBar"]
+[node name="ImageListContainer" type="VBoxContainer" parent="DirectoryBar"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -509,10 +523,10 @@ offset_left = 9.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="DirectoryBar/ItemListContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="DirectoryBar/ImageListContainer"]
 layout_mode = 2
 
-[node name="DirectoryLabel" type="Label" parent="DirectoryBar/ItemListContainer/HBoxContainer"]
+[node name="DirectoryLabel" type="Label" parent="DirectoryBar/ImageListContainer/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
@@ -520,10 +534,26 @@ label_settings = SubResource("LabelSettings_0t6dg")
 horizontal_alignment = 1
 text_overrun_behavior = 3
 
-[node name="DateSortButton" type="Button" parent="DirectoryBar/ItemListContainer/HBoxContainer"]
+[node name="RefreshButton" type="Button" parent="DirectoryBar/ImageListContainer/HBoxContainer2"]
+layout_mode = 2
+text = "R"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="DirectoryBar/ImageListContainer"]
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="DirectoryBar/ImageListContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Search..."
+clear_button_enabled = true
+
+[node name="DateSortButton" type="Button" parent="DirectoryBar/ImageListContainer/HBoxContainer"]
 custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
+focus_mode = 0
 toggle_mode = true
+text = "A"
+script = SubResource("GDScript_024cx")
 
 [node name="Titlebar" type="Control" parent="."]
 unique_name_in_owner = true
