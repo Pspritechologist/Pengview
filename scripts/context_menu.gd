@@ -22,7 +22,9 @@ func _init(main_window: Main) -> void:
 	set_item_metadata(item_count - 1, func(): main.imageview.reset())
 	
 	add_item("Show Image Metadata")
-	set_item_metadata(item_count - 1, func(): main.meta_window.show())
+	set_item_metadata(item_count - 1, func(): #TODO Make this cleaner, probably a function for it in like main or whatever. MetaParser?
+		var thread = Thread.new()
+		thread.start(main._setup_meta_threaded.bind(main.imageview.current_path, null)))
 	
 	add_multistate_item("Scale: %sx" % scale_factor, 5)
 	set_item_metadata(item_count - 1, _on_scaling_pressed.bind(item_count - 1))

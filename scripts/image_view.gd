@@ -30,6 +30,7 @@ const supported_file_types: PackedStringArray = [
 	"jpg",
 	"jpeg",
 	"gif",
+	"mp4",
 ]
 
 #static var scaling_tooltips: Dictionary = {
@@ -67,9 +68,9 @@ func load_image(path: String, resize: bool = true) -> void:
 		printerr("Error: ImageView.load_image() only supports the following types: %s. Image loaded is of type: %s" % [supported_file_types, path.get_extension()])
 		return
 
-	var output = _import_image_standard(path) if path.get_extension().to_lower() != "gif" else _import_gif(path)
+	var output = _import_image_standard(path) if path.get_extension().to_lower() != "gif" and path.get_extension().to_lower() != "mp4" else _import_gif(path) #TODO This is stupid.
 	if !output:
-		print_debug("Error: ImageView/load_image() couldn't load %s" % path)
+		print_debug("Error: ImageView.load_image() couldn't load %s" % path)
 		return
 	texture = output
 	current_path = path
@@ -148,7 +149,6 @@ func _import_gif(path: String): # Can't have a return because then null is inval
 		var tmp_path = _temp + "/" + path.get_file().get_basename()
 		DirAccess.make_dir_recursive_absolute(tmp_path)
 		var cmdout = []
-		print("%s %s %s %s" % [InitialSetup.ffmpeg, "-i", path, tmp_path + "/output%04d.png"])
 		if OS.execute(InitialSetup.ffmpeg, ["-i", path, tmp_path + "/output%04d.png"], cmdout, false, OS.has_feature("editor")) != OK:
 			printerr("Error: ImageView._import_gif() had an ffmpeg error. Output is below.")
 			print(cmdout)
@@ -158,11 +158,24 @@ func _import_gif(path: String): # Can't have a return because then null is inval
 		
 		anim_texture = AnimatedTexture.new()
 		var index: int = 0
+		
+		var meta = MetaParser.read_meta(path)
+		var delay: float = 0.01
+		
+		if meta.has("Duration") and meta["Duration"].to_float() or Time.get_unix_time_from_datetime_string(meta["Duration"]):
+			var duration: float = meta["Duration"].to_float() if meta["Duration"].to_float() else Time.get_unix_time_from_datetime_string(meta["Duration"])
+			delay = duration / float(output_files.size())
+		else:
+			printerr("File does not have a valid Duration meta!\n", path, ((" - META: " + meta["Duration"]) if meta.has("Duration") else null))
+		
 		for file in output_files:
+			if index >= AnimatedTexture.MAX_FRAMES: 
+				DirAccess.remove_absolute("%s/%s" % [tmp_path, file])
+				continue
 			var img = Image.load_from_file("%s/%s" % [tmp_path, file])
 			var text = ImageTexture.create_from_image(img)
 			anim_texture.set_frame_texture(index, text)
-			anim_texture.set_frame_duration(index, 0.04162) #TODO Get info properly.
+			anim_texture.set_frame_duration(index, delay) #TODO Get info properly.
 			DirAccess.remove_absolute("%s/%s" % [tmp_path, file])
 			index += 1
 		anim_texture.frames = index

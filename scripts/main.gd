@@ -16,7 +16,7 @@ class_name Main extends Control
 
 var imageview: ImageView # The big cheese.
 
-var meta_window: Window # The window for displaying metadata. Starts hidden.
+#var meta_window: Window # The window for displaying metadata. Starts hidden.
 
 const _window_title_base: String = "Pengview"
 const _window_title_tags: String = "[color=white][outline_color=black][outline_size=4][font_size=24]"
@@ -74,11 +74,6 @@ func _ready() -> void:
 		imageview.load_image(path)
 	else:
 		setup_window_title()
-	
-	# Setup meta window.
-	if InitialSetup.exiftool_installed and ImageView.is_valid_image_path(imageview.current_path):
-		var meta_thread: Thread = Thread.new()
-		meta_thread.start(_setup_meta_threaded.bind(meta_thread))
 
 
 ## Handles fading the title bar, and resizing consistently.
@@ -192,29 +187,30 @@ func _title_button_pressed(type: int) -> void:
 			quit()
 
 
-func _setup_meta_threaded(thread: Thread = null) -> void:
-	var data := MetaParser.read_meta(imageview.current_path)
+func _setup_meta_threaded(path: String, thread: Thread = null) -> void:
+	var data := MetaParser.read_meta(path)
 
 	var meta_inst = load(_meta_window_scene).instantiate()
 	meta_inst.items = data
 	meta_inst.update_list()
-	call_deferred("_setup_meta_post_thread", meta_inst, thread)
+	call_deferred("_setup_meta_post_thread", meta_inst, path.get_file(), thread)
 
-func _setup_meta_post_thread(meta, thread: Thread) -> void:
+func _setup_meta_post_thread(meta, window_name: String, thread) -> void:
 	if thread: thread.wait_to_finish()
 	
-	meta_window = Window.new()
+	var meta_window = Window.new()
 	meta_window.visible = false
-	#meta_window.unresizable = true
-	meta_window.title = "Image Metadata"
+	meta_window.title = "Meta: %s" % window_name
 	meta_window.min_size = Vector2i(240, 240)
 	meta_window.size = Vector2i(280, 550)
 	meta_window.transient = true
 	meta_window.add_child(meta)
 	add_child(meta_window)
+	meta_window.current_screen = get_window().current_screen
 	meta_window.move_to_center() # Causes a thread-related error?? Seems to be fine.
+	meta_window.visible = true
 	
-	meta_window.close_requested.connect(func(): meta_window.visible = false)
+	meta_window.close_requested.connect(meta_window.queue_free)
 
 
 func quit() -> void:
